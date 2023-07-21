@@ -2,56 +2,16 @@ import os
 from netCDF4 import Dataset
 from netCDF4 import num2date
 import numpy as np
-import motuclient
 import pandas as pd
+import cdsapi
 import configparser
 from datetime import datetime, timedelta
 import pymongo
 import uuid
+import numpy.ma as ma
+from math import pi
 from confluent_kafka import Producer
 import json
-
-
-# Procedure to donwload Wave data from Copernicus Marine Service (CMEMS)
-
-class MotuOptions:
-    def __init__(self, attrs: dict):
-        super(MotuOptions, self).__setattr__("attrs", attrs)
-
-    def __setattr__(self, k, v):
-        self.attrs[k] = v
-
-    def __getattr__(self, k):
-        try:
-            return self.attrs[k]
-        except KeyError:
-            return None
-
-
-def motu_option_parser(script_template, usr, pwd, output_filename):
-    dictionary = dict(
-        [e.strip().partition(" ")[::2] for e in script_template.split('--')])
-    dictionary['variable'] = [value for (var, value) in
-                              [e.strip().partition(" ")[::2] for e in script_template.split('--')] if var == 'variable']
-    for k, v in list(dictionary.items()):
-        if v == '<OUTPUT_DIRECTORY>':
-            dictionary[k] = '.'
-        if v == '<OUTPUT_FILENAME>':
-            dictionary[k] = output_filename
-        if v == '<USERNAME>':
-            dictionary[k] = usr
-        if v == '<PASSWORD>':
-            dictionary[k] = pwd
-        if k in ['longitude-min', 'longitude-max', 'latitude-min',
-                 'latitude-max', 'depth-min', 'depth-max']:
-            dictionary[k] = float(v)
-        if k in ['date-min', 'date-max']:
-            dictionary[k] = v[1:-1]
-        dictionary[k.replace('-', '_')] = dictionary.pop(k)
-    dictionary.pop('python')
-    dictionary['auth_mode'] = 'cas'
-    return dictionary
-
 
 # Create the Kafka producer
 producer = Producer({
@@ -66,7 +26,7 @@ topic_list = topic_metadata.topics
 for topic in topic_list:
     print("-----------------------------------------------------------------------------------------", topic)
 
-topic = 'wave_topic'
+topic = 'wind_topic'
 # data = {'message': 'Hello, Kafka!'}
 
 
@@ -76,10 +36,9 @@ def delivery_report(err, msg):
     else:
         print(f'Message delivered to topic: {msg.topic()}')
 
-
 myclient = pymongo.MongoClient("mongodb://host.docker.internal:27017")
 db = myclient["kafka_db"]
-mycol = db["waveData"]
+mycol = db["windData"]
 
 config = configparser.ConfigParser()
 config.read('config.conf')
@@ -97,7 +56,7 @@ latitude_max = lat + rad
 # while True:
 # Get the current time
 current_time = datetime.now()
-
+current_time = current_time - timedelta(days=10)
 # Subtract 2 hours from the current time
 before_3_hours_time_date = current_time - timedelta(hours=3)
 
@@ -126,62 +85,88 @@ month_5hours = before_5_hours_time_date.strftime("%m")
 day_5hours = before_5_hours_time_date.strftime("%d")  # Day of the month (zero-padded)
 time_5hours = rounded_time_5hours.strftime("%H:%M")  # Time in HH:MM format
 
-# In order to download data you have to sign up/login to CMEMS -- provide the credentials
-# USERNAME = input('Enter your username: ')
-# PASSWORD = getpass.getpass('Enter your password: ')
-USERNAME = 'mmini1'
-PASSWORD = 'Artemis2000'
+# Retrieve Wind data from Copernicus C3S and store as netCDF4 file using CDS API
+c = cdsapi.Client()
 
-'----------------------------------------------Wave Dataset-------------------------------------------------------'
+windData_Jan_2022 = 'data/ERA5_Wind3H.nc'
+# windData_Feb_2022 = 'data/ERA5_Wind3H.nc'
 
-# Provide output directory/filenames
-OUTPUT_FILENAME = 'data/CMEMS_Wave3H.nc'
+dataList = [
+    {'fileLocation': windData_Jan_2022, 'month': month_3hours, 'day': day_3hours, 'time': [time_5hours, time_3hours]}]
+print("time", dataList[0]['time'])
+print("day", dataList[0]['day'])
+print("month", dataList[0]['month'])
 
-# Change the variables according to the desired dataset
-script_template = f'python -m motuclient \
-    --motu https://nrt.cmems-du.eu/motu-web/Motu \
-    --service-id GLOBAL_ANALYSISFORECAST_WAV_001_027-TDS \
-    --product-id cmems_mod_glo_wav_anfc_0.083deg_PT3H-i \
-    --longitude-min {longitude_min} --longitude-max {longitude_max} \
-    --latitude-min {latitude_min} --latitude-max {latitude_max} \
-    --date-min "' + str(before_3_hours_time_date) + '" --date-max "' + str(current_time) + '" \
-    --variable VHM0 --variable VMDR --variable VTM10 \
-    --out-dir <OUTPUT_DIRECTORY> --out-name <OUTPUT_FILENAME> \
-    --user <USERNAME> --pwd <PASSWORD>'
+for item in dataList:
+    c.retrieve(
+        'reanalysis-era5-single-levels',
+        {
+            'product_type': 'reanalysis',
+            'variable': ['10m_u_component_of_wind', '10m_v_component_of_wind'],
+            'year': '2023',
+            'month': item['month'],
+            'day': item['day'],
+            'time': dataList[0]['time'],
+            'area': [latitude_max, longitude_min, latitude_min, longitude_max],
+            'format': 'netcdf',
+        },
+        item['fileLocation'])
 
-print(script_template)
+windData = Dataset('data/ERA5_Wind3H.nc', 'r+')
 
-data_request_options_dict_automated = motu_option_parser(script_template, USERNAME, PASSWORD, OUTPUT_FILENAME)
+windData_BL = windData
+# Extract variables for combined wind/wave dataset
+u10 = windData_BL.variables['u10']
+v10 = windData_BL.variables['v10']
 
-# Motu API executes the downloads
-motuclient.motu_api.execute_request(MotuOptions(data_request_options_dict_automated))
+# Define the new variable --> wind speed
+print("--------------time---------------", )
+wind_speed = windData_BL.createVariable('wind_speed', np.int16, ('time', 'latitude', 'longitude'))
+wind_speed.units = 'm s**-1'
+wind_speed.long_name = '10 metre wind speed'
 
-waveData = Dataset('data/CMEMS_Wave3H.nc', 'r+')
+# Calculate the square of u10, v10 and write to u10, v10 variable in netCDF4 file
+u10sq = u10[:] ** 2
+v10sq = v10[:] ** 2
 
-waveData.set_auto_mask(True)
+# Calculate wind speed from u,v components
+wind_speed = ma.sqrt(u10sq + v10sq)
+wind_speed[:]
 
-# Extract variables for wave dataset
-vhm0 = waveData.variables['VHM0']
-vmdr = waveData.variables['VMDR']
-vtm10 = waveData.variables['VTM10']
+# Define the new variable --> wind direction
+wind_dir = windData_BL.createVariable('wind_dir', np.int16, ('time', 'latitude', 'longitude'))
+wind_dir.units = 'deg'
+wind_dir.long_name = '10 metre wind direction'
+
+# Calculate wind direction from u,v components
+wind_dir = (270 - np.arctan2(v10[:], u10[:]) * 180 / pi) % 360
+wind_dir[:]
+
+# convert time dimension to string
+nctime = windData_BL.variables['time'][:]  # get values
+t_unit = windData_BL.variables['time'].units  # get unit  "days since 1950-01-01T00:00:00Z"
+t_cal = windData_BL.variables['time'].calendar
+tvalue = num2date(nctime, units=t_unit, calendar=t_cal)
+str_time = [i.strftime("%Y-%m-%d %H:%M:%S") for i in tvalue]  # to display dates as string
+
 
 # Get dimensions assuming 3D: time, latitude, longitude
-time_dim, lat_dim, lon_dim = vhm0.get_dims()
-time_var = waveData.variables[time_dim.name]
+time_dim, lat_dim, lon_dim = u10.get_dims()
+time_var = windData_BL.variables[time_dim.name]
 times = num2date(time_var[:], time_var.units)
-latitudes = waveData.variables[lat_dim.name][:]
-longitudes = waveData.variables[lon_dim.name][:]
+latitudes = windData_BL.variables[lat_dim.name][:]
+longitudes = windData_BL.variables[lon_dim.name][:]
 
 output_dir = './'
 
 # ==========================================================================
 # Write data as a CSV table with 4 columns: time, latitude, longitude, value
 # ==========================================================================
-filename = os.path.join(output_dir, 'data/CMEMS_wave.csv')
+filename = os.path.join(output_dir, 'data/ERA5_wind.csv')
 print(f'Writing data in tabular form to {filename} (this may take some time)...')
 
-times_grid, latitudes_grid, longitudes_grid = [x.flatten() for x in
-                                               np.meshgrid(times, latitudes, longitudes, indexing='ij')]
+times_grid, latitudes_grid, longitudes_grid = [
+    x.flatten() for x in np.meshgrid(times, latitudes, longitudes, indexing='ij')]
 
 print("times_grid", len(times_grid))
 print("latitudes_grid", len(latitudes_grid))
@@ -193,17 +178,30 @@ num_ids = len(times_grid)
 # Generate a list of random IDs
 random_ids = [str(uuid.uuid4()) for _ in range(num_ids)]
 
-# print(random_ids)
-
 df = pd.DataFrame({
     'id': random_ids,
     'time': [t.isoformat(sep=" ") for t in times_grid],
     'latitude': latitudes_grid,
     'longitude': longitudes_grid,
-    'vhm0': vhm0[:].flatten(),
-    'vmdr': vmdr[:].flatten(),
-    'vtm10': vtm10[:].flatten(),
+    'u10': u10[:].flatten(),
+    'v10': v10[:].flatten(),
+    'speed': wind_speed[:].flatten(),
+    'direction': wind_dir[:].flatten()
 })
+
+print(df)
+
+# Find null values in 'Feature1'
+null_values = df['u10'].isnull()
+
+# Filter the DataFrame to show only rows with null values in 'Feature1'
+rows_with_null = df[null_values]
+
+# Print the rows with null values
+print(rows_with_null)
+
+# Drop rows with null values in 'u10'
+df = df.dropna(subset=['u10'])
 
 print(df)
 
@@ -219,7 +217,6 @@ myclient.close()
 for index, row in df.iterrows():
 
     data_topic = row.to_dict()
-
     # # Convert dictionary to JSON bytes
     value = json.dumps(data_topic).encode('utf-8')
 
@@ -228,5 +225,6 @@ for index, row in df.iterrows():
     producer.flush()
 
 df.to_csv(filename, index=False)
+print('Done')
 
 
