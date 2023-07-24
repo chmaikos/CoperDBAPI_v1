@@ -1,7 +1,7 @@
 # CoperDBAPI
 
 <p align="center">
-  <img width="846" height="391" src="[https://github.com/kontopoulos/TraClets/blob/main/traclet.png](https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-24%20at%203.33.34%20PM.png)" alt="CoperDBAPI"/>
+  <img width="846" height="391" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-24%20at%203.33.34%20PM.png" alt="CoperDBAPI"/>
 </p>
 
 
@@ -41,4 +41,3 @@ Copernicus has information every 3hours started at 00.00
 If the program starts at 05.00 o'clock that means that the first time that gets is 5 - (5%2) = 3 --> 03.00 o'clock
 ```
 ---
-
