@@ -65,3 +65,12 @@ with the below format
 }
 ```
 ---
+
+### ProducerWind
+
+The first time it will pull data from the Copernicus is when it is first uploaded the docker composes.
+After from that it will take data every 3 hours.
+Duplicates don't exist because the time that pull data from Copernicus is :
+```code
+current_time - 3hours + 1second until current time
+```
