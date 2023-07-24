@@ -1,7 +1,7 @@
 # CoperDBAPI
 
 <p align="center">
-  <img width="846" height="500" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-24%20at%203.33.34%20PM.png" alt="CoperDBAPI"/>
+  <img width="846" height="700" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-24%20at%203.33.34%20PM.png" alt="CoperDBAPI"/>
 </p>
 
 
