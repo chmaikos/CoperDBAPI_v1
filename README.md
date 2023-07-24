@@ -40,4 +40,28 @@ Copernicus has information every 3hours started at 00.00
 ```example
 If the program starts at 05.00 o'clock that means that the first time that gets is 5 - (5%2) = 3 --> 03.00 o'clock
 ```
+
+We get the information as a .nc file from Copernicus, we refactor it into json and push it into kafka topic
+```example
+wave_topic
+```
+and into MongoDB into a collection named
+
+```example
+waveData
+```
+with the below format
+```
+{
+  "_id": {
+    "$oid": "64be7b2a8aeed4c895d26bbc"
+  },
+  "time": "2023-07-24 12:00:00",
+  "latitude": 35,
+  "longitude": 18.916666666666657,
+  "vhm0": 0.25999999046325684,
+  "vmdr": 322.69000244140625,
+  "vtm10": 3.4600000381469727
+}
+```
 ---
