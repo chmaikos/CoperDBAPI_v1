@@ -24,7 +24,7 @@ docker-compose up --build
 docker-compose up --build --remove-orphans
 ```
 <p align="center">
-  <img width="700" height="400" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-24%20at%205.32.18%20PM.png" alt="Sublime's custom image"/>
+  <img width="700" height="500" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-24%20at%205.32.18%20PM.png" alt="Sublime's custom image"/>
 </p>
 
 ### ProducerWave
