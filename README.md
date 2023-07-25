@@ -69,7 +69,7 @@ Wave period mean value (VTM10)
 ```
 
 <p align="center">
-  <img width="700" height="600" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-25%20at%208.24.36%20AM.png" alt="CoperDBAPI"/>
+  <img width="500" height="400" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-25%20at%208.24.36%20AM.png" alt="CoperDBAPI"/>
 </p>
 ---
 
@@ -135,7 +135,7 @@ Speed information :
 
 `GET /data`
 
-    http://127.0.0.1:5000/data?dateMin=2023-07-24T04:00:00&dateMax=2023-07-24T07:00:00&latitude=50&longitude=-27&radius=10
+    http://127.0.0.1:5000/data?dateMin=2023-07-19T04:00:00&dateMax=2023-07-19T07:00:00&latitude=35&longitude=18&radius=20
 
     User has to fill 5 variables : dateMin, dateMax, latitude, longitude, radius
 
@@ -143,23 +143,25 @@ Speed information :
 
     { "waveData" :
         {
-          "time": "2023-07-24 12:00:00",
+          "time": "2023-07-19 06:00:00",
           "latitude": 35,
           "longitude": 18.916666666666657,
           "vhm0": 0.25999999046325684,
           "vmdr": 322.69000244140625,
           "vtm10": 3.4600000381469727
         }
+        {...}
     }
 
     { "windData" :
         {
-           "time": "2023-07-18 00:00:00",
-           "latitude": 50.150001525878906,
-           "longitude": -27.1200008392334,
+           "time": "2023-07-19 04:00:00",
+           "latitude": 35,
+           "longitude": 18.916666666666657,
            "u10": -4.6063704822533245,
            "v10": -0.529921079222938,
            "speed": 4.636751596751709,
            "direction": 83.43748990096958
         }
+        {...}
     }
