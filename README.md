@@ -156,27 +156,64 @@ The Horizontal Resolution is:
 
 ## Response
 
-    { "waveData" :
-        {
-          "time": "2023-07-19 06:00:00",
-          "latitude": 35,
-          "longitude": 18.916666666666657,
-          "vhm0": 0.25999999046325684,
-          "vmdr": 322.69000244140625,
-          "vtm10": 3.4600000381469727
-        }
-        {...}
-    }
+When the user gives a date older or newer than those in the collections, returned an empty list.
 
-    { "windData" :
-        {
-           "time": "2023-07-19 04:00:00",
-           "latitude": 35,
-           "longitude": 18.916666666666657,
-           "u10": -4.6063704822533245,
-           "v10": -0.529921079222938,
-           "speed": 4.636751596751709,
-           "direction": 83.43748990096958
-        }
-        {...}
-    }
+    [
+      {
+        "waveData": [
+          
+        ]
+      },
+      {
+        "windData": [
+          
+        ]
+      }
+    ]
+    
+When the user gives a valid date we check if it has data for this langitude, longitude given by the user.
+If it has, it returns the information for both collections.
+
+    [
+      {
+        "waveData": [
+          {
+            "time": "2023-07-19 06:00:00",
+            "latitude": 35,
+            "longitude": 18.916666666666657,
+            "vhm0": 0.25999999046325684,
+            "vmdr": 322.69000244140625,
+            "vtm10": 3.4600000381469727
+          }
+          {...}
+        ]
+      },
+      {
+        "windData": [
+          {
+            "time": "2023-07-19 06:00:00",
+            "latitude": 35,
+            "longitude": 18.916666666666657,
+            "vhm0": 0.25999999046325684,
+            "vmdr": 322.69000244140625,
+            "vtm10": 3.4600000381469727
+          }
+          {...}
+        ]
+      }
+    ]
+
+If not, it returns an empty list.
+
+    [
+      {
+        "waveData": [
+          
+        ]
+      },
+      {
+        "windData": [
+          
+        ]
+      }
+    ]
