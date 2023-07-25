@@ -69,7 +69,7 @@ Wave period mean value (VTM10)
 ```
 
 <p align="center">
-  <img width="870" height="700" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-24%20at%203.33.34%20PM.png" alt="CoperDBAPI"/>
+  <img width="700" height="600" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-25%20at%208.24.36%20AM.png" alt="CoperDBAPI"/>
 </p>
 ---
 
@@ -119,9 +119,12 @@ Speed is a combination of the above two components (speed)
 ```
 
 Speed information :
+<p align="center">
+  <img width="300" height="250" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-25%20at%208.25.32%20AM.png" alt="CoperDBAPI"/>
+</p>
 
 <p align="center">
-  <img width="100" height="150" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-25%20at%208.25.44%20AM.png" alt="CoperDBAPI"/>
+  <img width="150" height="50" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-25%20at%208.25.44%20AM.png" alt="CoperDBAPI"/>
 </p>
 
 ---
