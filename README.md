@@ -152,7 +152,7 @@ The Horizontal Resolution is:
     User has to fill 5 variables : dateMin, dateMax, latitude, longitude, radius
 
 <p align="center">
-  <img width="300" height="400" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/photos/Screenshot%202023-07-25%20at%2011.53.06%20AM.png" alt="CoperDBAPI"/>
+  <img width="250" height="250" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/photos/Screenshot%202023-07-25%20at%2011.53.06%20AM.png" alt="CoperDBAPI"/>
 </p>
 ## Response
 
