@@ -69,7 +69,7 @@ Wave period mean value (VTM10)
 ```
 
 <p align="center">
-  <img width="300" height="400" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-25%20at%208.24.36%20AM.png" alt="CoperDBAPI"/>
+  <img width="400" height="200" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-25%20at%208.24.36%20AM.png" alt="CoperDBAPI"/>
 </p>
 ---
 
