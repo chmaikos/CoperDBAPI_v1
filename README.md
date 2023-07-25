@@ -121,7 +121,7 @@ Speed is a combination of the above two components (speed)
 Speed information :
 
 <p align="center">
-  <img width="200" height="150" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-25%20at%208.25.44%20AM.png" alt="CoperDBAPI"/>
+  <img width="100" height="150" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-25%20at%208.25.44%20AM.png" alt="CoperDBAPI"/>
 </p>
 
 ---
