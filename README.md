@@ -27,6 +27,12 @@ docker-compose up --build --remove-orphans
   <img width="700" height="600" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-24%20at%205.32.18%20PM.png" alt="Sublime's custom image"/>
 </p>
 
+###### Keep docker compose running
+
+<p align="center">
+  <img width="700" height="600" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-24%20at%205.32.18%20PM.png" alt="Sublime's custom image"/>
+</p>
+
 ### ProducerWave
 
 The first time it will pull data from the Copernicus is when it is first uploaded the docker composes.
@@ -71,6 +77,11 @@ Wave period mean value (VTM10)
 <p align="center">
   <img width="400" height="200" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-25%20at%208.24.36%20AM.png" alt="CoperDBAPI"/>
 </p>
+
+The Horizontal Resolution is:
+```
+0.083° x 0.083°
+```
 ---
 
 ### ProducerWind
@@ -127,6 +138,10 @@ Speed information :
   <img width="150" height="50" src="https://github.com/ArtemisStefanidou/CoperDBAPI/blob/main/Screenshot%202023-07-25%20at%208.25.44%20AM.png" alt="CoperDBAPI"/>
 </p>
 
+The Horizontal Resolution is:
+```
+0.25° x 0.25°
+```
 ---
 
 ### API
