@@ -53,9 +53,6 @@ waveData
 with the below format
 ```
 {
-  "_id": {
-    "$oid": "64be7b2a8aeed4c895d26bbc"
-  },
   "time": "2023-07-24 12:00:00",
   "latitude": 35,
   "longitude": 18.916666666666657,
@@ -64,13 +61,59 @@ with the below format
   "vtm10": 3.4600000381469727
 }
 ```
+The information analyzes below:
+```
+Significant Wave Height (VHM0)
+Wave Direction (VMDR)
+Wave period mean value (VTM10)
+```
 ---
 
 ### ProducerWind
 
 The first time it will pull data from the Copernicus is when it is first uploaded the docker composes.
-After from that it will take data every 3 hours.
-Duplicates don't exist because the time that pull data from Copernicus is :
-```code
-current_time - 3hours + 1second until current time
+After from that it will take data every 1 day.
+The erliest data that we can get from Copernicus is 6 days ago.
+The values of time in which we have access are the follows:
 ```
+'time': [
+                    '00:00', '01:00', '02:00', '03:00', '04:00', '05:00',
+                    '06:00', '07:00', '08:00', '09:00', '10:00', '11:00',
+                    '12:00', '13:00', '14:00', '15:00', '16:00', '17:00',
+                    '18:00', '19:00', '20:00', '21:00', '22:00', '23:00',
+                ]
+```
+Duplicates don't exist.
+
+We get the information as a .nc file from Copernicus, we refactor it into json and push it into kafka topic
+```example
+wind_topic
+```
+and into MongoDB into a collection named
+
+```example
+windData
+```
+with the below format
+```
+{
+  "time": "2023-07-18 00:00:00",
+  "latitude": 50.150001525878906,
+  "longitude": -27.1200008392334,
+  "u10": -4.6063704822533245,
+  "v10": -0.529921079222938,
+  "speed": 4.636751596751709,
+  "direction": 83.43748990096958
+}
+```
+
+The information analyzes below:
+```
+East wind component (u10)
+North wind component (v10)
+Speed is a combination of the above two components (speed)
+```
+
+
+---
+
