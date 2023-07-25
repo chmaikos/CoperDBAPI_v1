@@ -7,7 +7,7 @@
 
 ### What is the CoperDBAPI?
 
-A traclet is an image representation of a trajectory. This representation is indicative of the mobility patterns of the moving objects. TraClets need to efficiently visualize and capture two key features that characterize the trajectory patterns of moving objects: i) the shape of the trajectory which indicates the way the object moves in space, and ii) the speed that indicates how fast the object moves in space.
+
 
 ---
 
