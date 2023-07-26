@@ -66,7 +66,7 @@ with the below format
 ```
 The information analyzes below:
 ```
-Significant Wave Height (VHM0)
+Significant Wave Height (VHM0) (m) S.I.
 Wave Direction (VMDR)
 Wave period mean value (VTM10)
 ```
@@ -121,9 +121,9 @@ with the below format
 
 The information analyzes below:
 ```
-East wind component (u10)
-North wind component (v10)
-Speed is a combination of the above two components (speed)
+East wind component (u10) (m/s) S.I.
+North wind component (v10) (m/s) S.I.
+Speed is a combination of the above two components (speed) (m/s) S.I.
 ```
 
 Speed information :
