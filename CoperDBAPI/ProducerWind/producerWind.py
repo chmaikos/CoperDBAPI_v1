@@ -37,7 +37,7 @@ def create_square(latitude, longitude, radius):
 
 # Create the Kafka producer
 producer = Producer({
-    'bootstrap.servers': 'host.docker.internal:29092'
+    'bootstrap.servers': 'kafka1:29092'
 })
 
 # Get the list of topics
@@ -59,7 +59,7 @@ def delivery_report(err, msg):
         print(f'Message delivered to topic: {msg.topic()}')
 
 
-myclient = pymongo.MongoClient("mongodb://host.docker.internal:27017")
+myclient = pymongo.MongoClient("mongodb://mongodb:27017")
 db = myclient["kafka_db"]
 mycol = db["windData"]
 

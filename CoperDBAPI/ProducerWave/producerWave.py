@@ -75,7 +75,7 @@ def motu_option_parser(script_template, usr, pwd, output_filename):
 
 # Create the Kafka producer
 producer = Producer({
-    'bootstrap.servers': 'host.docker.internal:29092'
+    'bootstrap.servers': 'kafka1:29092'
 })
 
 # Get the list of topics
