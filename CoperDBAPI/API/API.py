@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 list_csv = []
 
-myclient = pymongo.MongoClient("mongodb://host.docker.internal:27017")
+myclient = pymongo.MongoClient("mongodb://mongodb:27017")
 db = myclient["kafka_db"]
 mycol_wave = db["waveData"]
 mycol_wind = db["windData"]
