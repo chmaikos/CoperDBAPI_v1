@@ -11,7 +11,6 @@ from confluent_kafka import Producer
 import json
 from math import radians, cos
 import time
-from textwrap import dedent
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, filename='app.log',
@@ -113,24 +112,25 @@ while True:
         USERNAME, PASSWORD = 'mmini1', 'Artemis2000'
         OUTPUT_DIRECTORY = 'data'
         OUTPUT_FILENAME = 'CMEMS_Wave3H.nc'
-        script_template = dedent(f'''\
-        python -m motuclient \
-        --motu https://nrt.cmems-du.eu/motu-web/Motu \
-        --service-id GLOBAL_ANALYSISFORECAST_WAV_001_027-TDS \
-        --product-id cmems_mod_glo_wav_anfc_0.083deg_PT3H-i \
-        --longitude-min {lon_min} \
-        --longitude-max {lon_max} \
-        --latitude-min {lat_min} \
-        --latitude-max {lat_max} \
-        --date-min "{delta_3h}" \
-        --date-max "{curr_time}" \
-        --variable VHM0 \
-        --variable VMDR \
-        --variable VTM10 \
-        --out-dir {OUTPUT_DIRECTORY} \
-        --out-name {OUTPUT_FILENAME} \
-        --user {USERNAME} \
-        --pwd {PASSWORD}''')
+        script_template = (
+            f'python -m motuclient '
+            f'--motu https://nrt.cmems-du.eu/motu-web/Motu '
+            f'--service-id GLOBAL_ANALYSISFORECAST_WAV_001_027-TDS '
+            f'--product-id cmems_mod_glo_wav_anfc_0.083deg_PT3H-i '
+            f'--longitude-min {lon_min} '
+            f'--longitude-max {lon_max} '
+            f'--latitude-min {lat_min} '
+            f'--latitude-max {lat_max} '
+            f'--date-min "{delta_3h}" '
+            f'--date-max "{curr_time}" '
+            f'--variable VHM0 '
+            f'--variable VMDR '
+            f'--variable VTM10 '
+            f'--out-dir {OUTPUT_DIRECTORY} '
+            f'--out-name {OUTPUT_FILENAME} '
+            f'--user {USERNAME} '
+            f'--pwd {PASSWORD}'
+        )
 
         logging.info(script_template)
         data_request_options_dict_automated = motu_option_parser(
