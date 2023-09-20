@@ -110,7 +110,8 @@ while True:
         curr_time = datetime.now()
         delta_3h = curr_time - timedelta(hours=3) + timedelta(seconds=1)
         USERNAME, PASSWORD = 'mmini1', 'Artemis2000'
-        OUTPUT_FILENAME = 'data/CMEMS_Wave3H.nc'
+        OUTPUT_DIRECTORY = 'data'
+        OUTPUT_FILENAME = 'CMEMS_Wave3H.nc'
         script_template = f'python -m motuclient \
             --motu https://nrt.cmems-du.eu/motu-web/Motu \
             --service-id GLOBAL_ANALYSISFORECAST_WAV_001_027-TDS \
@@ -124,10 +125,10 @@ while True:
             --variable VHM0 \
             --variable VMDR \
             --variable VTM10 \
-            --out-dir <OUTPUT_DIRECTORY> \
-            --out-name <OUTPUT_FILENAME> \
-            --user <USERNAME> \
-            --pwd <PASSWORD>'
+            --out-dir {OUTPUT_DIRECTORY} \
+            --out-name {OUTPUT_FILENAME} \
+            --user {USERNAME} \
+            --pwd {PASSWORD}'
 
         logging.info(script_template)
         data_request_options_dict_automated = motu_option_parser(
