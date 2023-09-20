@@ -110,8 +110,7 @@ while True:
         curr_time = datetime.now()
         delta_3h = curr_time - timedelta(hours=3) + timedelta(seconds=1)
         USERNAME, PASSWORD = 'mmini1', 'Artemis2000'
-        OUTPUT_DIRECTORY = 'data'
-        OUTPUT_FILENAME = 'CMEMS_Wave3H.nc'
+        OUTPUT_FILENAME = 'data/CMEMS_Wave3H.nc'
         script_template = (
             f'python -m motuclient '
             f'--motu https://nrt.cmems-du.eu/motu-web/Motu '
@@ -126,10 +125,10 @@ while True:
             f'--variable VHM0 '
             f'--variable VMDR '
             f'--variable VTM10 '
-            f'--out-dir {OUTPUT_DIRECTORY} '
-            f'--out-name {OUTPUT_FILENAME} '
-            f'--user {USERNAME} '
-            f'--pwd {PASSWORD}'
+            f'--out-dir <OUTPUT_DIRECTORY> '
+            f'--out-name <OUTPUT_FILENAME> '
+            f'--user <USERNAME> '
+            f'--pwd <PASSWORD>'
         )
 
         logging.info(script_template)
